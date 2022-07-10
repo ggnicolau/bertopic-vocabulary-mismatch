@@ -1,5 +1,4 @@
  <div align="center">
-<img src="https://coursereport-production.imgix.net/uploads/school/logo/84/original/logo-ironhack-blue.png?w=200&h=200&dpr=1&q=75">
 <img src="http://www.saocarlos.usp.br/wp-content/uploads/2020/11/logo_50anos_500.250.png">
 </div>
 
