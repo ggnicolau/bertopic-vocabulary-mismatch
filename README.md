@@ -20,21 +20,21 @@ Project Organization
     │   ├── processed      <- The final, canonical data sets.
     │   └── raw            <- The original, immutable data dump.
     │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    ├── models             <- Trained and serialized models, model predictions, or model summaries.
+    │   ├── pckl           <- Pickle files from trained BERTopic models.
+    │   └── predictions    <- Our scores for our baseline and BERTopic experiments.
     │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
+    ├── notebooks          <- Jupyter notebooks with steps for training and evaluating models.
     │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
+    ├── references         <- Our thesis and literature review bibliography.
+    │   ├── thesis         <- Thesis for conclusion of the MBA at ICMC-USP (São Paulo, Brazil).
+    │   └── bibliography   <- Our scientific references.
     │
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
     └── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 
-
---------
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
 
@@ -182,7 +182,6 @@ Once we had our baseline and our hypothesis we were able to compare them.
 As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results.
 
 In the future, we will conduct new experiments looking for other parameters that may generate even better results. Further, we will also conduct experiments on more datasets. Thus, we will do a statistical analysis of the results obtained using Friedman Test, to check if the improvement is relevant.
-
 
 # **BIBLIOGRAPHIC REFERENCES**
 
