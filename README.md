@@ -2,23 +2,7 @@
 <img src="http://www.saocarlos.usp.br/wp-content/uploads/2020/11/logo_50anos_500.250.png">
 </div>
 
-<div align="left">
-
-[![](https://readme-typing-svg.herokuapp.com/)](https://git.io/typing-svg)
-</div>
-<!--GITHUB_ACTIVITY:{"rows": 5}-->
-
 ---
-<div align="center">
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=ggnicolau&show_icons=true&theme=darcula)
-</div>
-<!--GITHUB_ACTIVITY:{"rows": 5}-->
-
----
-
-<div align="left">
-<div class=''text-justify''>
 
 BERTopic + BM25 for Vocabulary Mismatch
 ==============================
@@ -236,6 +220,14 @@ Yates, A., Nogueira, R., &amp; Lin, J. (2021). Pretrained transformers for text 
 
 <br/><br/>
 ![Quote](https://github-readme-quotes.herokuapp.com/quote?theme=dark&animation=grow_out_in)
+
+---
+
+![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=ggnicolau&show_icons=true&theme=darcula)
+
+<!--GITHUB_ACTIVITY:{"rows": 5}-->
+
+<div class=''text-justify''>
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=ggnicolau&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
 
