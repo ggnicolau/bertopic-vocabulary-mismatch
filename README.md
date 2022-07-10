@@ -21,7 +21,7 @@
 <div align="left">
 <div class=''text-justify''>
 
-TCC-vocabulary-mismatch-bertopic
+BERTopic + BM25 for Vocabulary Mismatch
 ==============================
 
 We used BERTopic + BM25 to conduct experiments for vocabulary mismatch, clustering data, for improving information retrieval when we assume a user want similar documents. We chose entropy as our metric.
@@ -33,12 +33,9 @@ Project Organization
     ├── Makefile           <- Makefile with commands like `make data` or `make train`
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
-    │   ├── external       <- Data from third party sources.
     │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
+    │   ├── processed      <- The final, canonical data sets.
     │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
     ├── models             <- Trained and serialized models, model predictions, or model summaries
     │
@@ -51,28 +48,7 @@ Project Organization
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+    └── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 
 
 --------
@@ -87,6 +63,7 @@ Project Organization
 * matplotlib
 * sklearn
 * nltk
+* torch
 * transformers
 * sentence-transformers
 * umap-learn
@@ -107,114 +84,131 @@ Project Organization
 * Github
 
 
-# **DESENVOLVIMENTO E EXPERIMENTO: BM25 + BERTOPIC**
+# **DEVELOPMENT AND EXPERIMENT: BM25 + BERTOPIC**
 
-# _1. Introdução e problema de pesquisa_
+# _1. Introduction and research problem_
 
-Partimos do problema de incompatibilidade de vocabulário (&quot;_vocabulary mismatch_&quot;) em que os usuários usam termos de consulta diferentes daqueles usados ​​em documentos relevantes. Esse é um dos desafios centrais sobre recuperação de informação (_Information Retrieval_) (Nogueira _et_ al, 2019, p.1).
+We started from the vocabulary mismatch problem (&quot;_vocabulary mismatch_&quot;) in which users use different query terms from those used in relevant documents. This is one of the central challenges in information retrieval (_Information Retrieval_) (Nogueira _et_ al, 2019, p.1).
 
-Nosso objetivo é melhorar a recuperação de informação (RI) de um sistema de busca para uma situação específica. Partimos da hipótese de que, se um usuário está interessado em um documento específico de um grupo, também interessa a ele que retorne outros documentos do mesmo grupo (Moura, 2009, p.17 _apud_ Chakrabarti, 2003; Kobayashi e Aono, 2004).
+Our goal is to improve the information retrieval (IR) of a search engine for a specific situation. We start from the hypothesis that, if a user is interested in a specific document from a group, he is also interested in returning other documents from the same group (Moura, 2009, p.17 _apud_ Chakrabarti, 2003; Kobayashi and Aono, 2004).
 
-Nossa proposta foi utilizar uma técnica de expansão dos documentos com termos que são representativos do conteúdo dos documentos, compondo um novo campo no sistema de busca com os termos extraídos. Criamos esse campo através da modelagem de tópicos dos nossos documentos melhorado por modelos de embeddings pré-treinados (BERT).
+Our proposal was to use a document expansion technique with terms that are representative of the content of the documents, composing a new field in the search system with the extracted terms. We created this field by modeling topics from our documents enhanced by pre-trained embeddings (BERT) models.
 
-Para isso, criamos um ambiente experimental que utiliza o Elasticsearch para recuperação de informação. O Elasticsearch tem como base o algoritmo BM25 (um algoritmo clássico de RI baseado em TF-IDF) (Beiske, 2013). Nesse sentido, obtemos um _framework_ que é composto de (BERT + modelo de tópicos) + BM25.
+For this, we created an experimental environment that uses Elasticsearch for information retrieval. Elasticsearch is based on the BM25 algorithm (a classic TF-IDF-based IR algorithm) (Beiske, 2013). In this sense, we get a _framework_ that is composed of (BERT + topic template) + BM25.
 
-# _2. Metodologia_
+# _2. Methodology_
 
-A partir desse ambiente experimental, podemos comparar os resultados da RI entre:
+From this experimental environment, we can compare the IR results between:
 
-1. Nosso baseline, composto dos documentos originais;
-2. Os documentos enriquecidos com termos extraídos de um modelo de tópicos, compondo um campo no sistema de busca com os novos termos;
+1. Our baseline, composed of the original documents;
+2. Documents enriched with terms extracted from a topic model, composing a field in the search system with the new terms;
 
-Optamos por uma variação do modelo de tópicos que incorpora também modelos de embeddings pré-treinados baseados no BERT, de forma a obter tópicos com melhor conteúdo semântico. Para isso, é utilizada a biblioteca de Python chamada BERTopic (Grootendorst, 2022) e o modelo pré-treinado &quot;_distiluse-base-multilingual-cased-v1_&quot;.
+We opted for a variation of the topic model that also incorporates pre-trained embedding models based on BERT, in order to obtain topics with better semantic content. For this, the Python library called BERTopic (Grootendorst, 2022) and the pre-trained model &quot;_distiluse-base-multilingual-cased-v1_&quot; are used.
 
-Será utilizada a métrica de entropia para comparar os resultados de (a) e (b).
+The entropy metric will be used to compare the results of (a) and (b).
 
-## _2.1. Função de Ranking - BM25_
+## _2.1. Ranking Function - BM25_
 
-Precisamos encontrar a relevância dos termos de queries e documentos para constituir um sistema de busca (RI). &quot;Contagem de palavras&quot; não é uma métrica suficiente para encontrar a relevância dos termos. Geralmente, os termos que mais aparecem são irrelevantes, como por exemplo conjunções (a, o, da, do etc) (Jimenez _et_ al, 2018, p.2888). Uma maneira de contornar isso e encontrar os termos mais relevantes é através de algoritmos como TF-IDF (_term frequency–inverse document frequency_). Assim, conseguimos filtrar os termos que aparecem muito em todos os documentos, porque entendemos que eles são irrelevantes; como consequência, damos maior peso para os termos que aparecem bastante em alguns documentos e podemos ver a distribuição deles ao longo do corpus de documentos.
+We need to find the relevance of query terms and documents to constitute a search engine (RI). &quot;Word count&quot; is not a sufficient metric to find the relevance of terms. Generally, the terms that appear the most are irrelevant, such as conjunctions (a, o, da, do etc) (Jimenez _et_ al, 2018, p.2888). One way around this and finding the most relevant terms is through algorithms like TF-IDF (_term frequency–inverse document frequency_). Thus, we were able to filter the terms that appear a lot in all documents, because we understand that they are irrelevant; as a consequence, we give greater weight to the terms that appear a lot in some documents and we can see their distribution throughout the corpus of documents.
 
-TF-IDF
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/tfidf.png>
+</div>
 
-Enquanto TF-IDF como um modelo de vetorial favorece a frequência de termos e penaliza a frequência de documentos, desconsidera também o tamanho dos documentos e a saturação da frequência dos termos (Seitz, 2022). Outro modelo, chamado BM25, é uma proposta para resolver esta limitação usando um modelo probabilístico. Assim, enquanto a frequência de termo é controlada por uma função de saturação para impedir o seu crescimento linear, o parâmetro usado para calcular o tamanho médio dos documentos penaliza os documentos longos com alta frequência de termos buscados (Jimenez _et_ al, 2018, p.2888).
+While TF-IDF as a vector model favors the frequency of terms and penalizes the frequency of documents, it also disregards the size of the documents and the saturation of the frequency of the terms (Seitz, 2022). Another model, called BM25, is a proposal to solve this limitation using a probabilistic model. Thus, while the term frequency is controlled by a saturation function to prevent its linear growth, the parameter used to calculate the average size of documents penalizes long documents with a high frequency of search terms (Jimenez _et_ al, 2018, p. 2888).
 
-BM25 :
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/bm25.png>
+</div>
 
-BM25 é o algoritmo mais utilizado em sistemas de busca pelo seu _tradeoff_ de acurácia e performance computacional, incorporado em sistemas baseados no Lucene (como o Elasticsearch e Solr).
+BM25 is the most used algorithm in search engines due to its _tradeoff_ of accuracy and computational performance, incorporated in systems based on Lucene (such as Elasticsearch and Solr).
 
-## _2.2. Geração de Tópicos_
+## _2.2. Topic Generation_
 
-Nosso baseline (a) utiliza os documentos originais sem enriquecimento semântico. Para enriquecê-los, geramos tópicos (conjunto de palavras hierarquizadas) que irão compor um novo campo no sistema de busca com os termos extraídos dos tópicos.
+Our baseline (a) uses the original documents without semantic enrichment. To enrich them, we generate topics (set of hierarchical words) that will compose a new field in the search system with the terms extracted from the topics.
 
-Para isso, utilizamos o _framework_ da biblioteca BERTopic (Grootendorst, 2022) para criar nosso modelo de tópicos. Ele passa por algumas etapas para produzir nossos tópicos.
+For this, we use the _BERTopic_ library framework (Grootendorst, 2022) to create our topic model. It goes through a few steps to produce our topics.
 
-![](RackMultipart20220710-1-a7jhna_html_5e3a9f8bc22104ef.png)
+<div align="center">
+<img src=https://maartengr.github.io/BERTopic/img/algorithm.png>
+</div>
 
-Em um primeiro momento, aproveitamos um modelo de _embeddings_ pré-treinado para projetar os nossos documentos nesse espaço vetorial e extrair os seus vetores utilizando a biblioteca _sentence-bert_. O modelo pré-treinado é utilizado para melhorar a qualidade de nossos vetores do que seria o caso se usássemos apenas o nosso conjunto de documentos para constituir nosso espaço vetorial (Nogueira _et al_, 2019).
+_Source: (__Grootendorst, 2022)_
 
-Em um segundo momento, aplica-se o algoritmo UMAP para redução de dimensionalidade do nosso espaço vetorial. Em seguida, aplica-se o algoritmo HDBSCAN para clusterização dos nossos documentos (Grootendorst, 2022).
+At first, we took advantage of a _embeddings_ to project our documents in this vector space and extract their vectors using the _sentence-bert_. The pre-trained model is used to improve the quality of our vectors than would be the case if we only used our document set to constitute our vector space (Nogueira _et al_, 2019).
 
-Por fim, aplicamos a fórmula CTF-ICF (uma variação da fórmula TF-IDF) para os clusters desenvolvidos na fase anterior. Assim, cada cluster é convertido em um único documento, em vez de um conjunto de documentos. De cada cluster, extraímos a frequência da palavra x no cluster c, onde c se refere ao cluster que criamos anteriormente. Isso resulta em nossa representação TF baseada em cluster. Como no TF-IDF clássico, multiplicamos TF por IDF para obter a pontuação de importância por palavra em cada classe (Grootendorst, 2022).
+In a second moment, the UMAP algorithm is applied to reduce the dimensionality of our vector space. Then, the HDBSCAN algorithm is applied to cluster our documents (Grootendorst, 2022).
 
-![](RackMultipart20220710-1-a7jhna_html_c1819398d168a498.png)
+Finally, we apply the CTF-ICF formula (a variation of the TF-IDF formula) to the clusters developed in the previous phase. Thus, each cluster is converted into a single document rather than a set of documents. From each cluster, we extract the frequency of the word x in cluster c, where c refers to the cluster we created earlier. This results in our cluster-based TF representation. As in the classic TF-IDF, we multiply TF by IDF to obtain the per-word importance score in each class (Grootendorst, 2022).
 
-O TF-IDF é usado para comparar a importância das palavras entre todos os documentos do nosso corpus. Em vez disso, tratamos apenas dos documentos em cada cluster e depois aplicamos o TF-IDF respectivamente para cada cluster como se fosse um documento (Grootendorst, 2022). O resultado seria a medida de importância para palavras dentro de um cluster. Quanto mais palavras importantes estiverem dentro de um cluster, mais ele será representativo daquele tópico. Em outras palavras, se extrairmos as palavras mais importantes por cluster, obteremos descrições de tópicos. Este modelo é chamado de TF-IDF baseado em cluster (CTF-ICF) (Grootendorst, 2022).
+<div align="center">
+<img src=https://maartengr.github.io/BERTopic/img/ctfidf.png>
 
-Uma vez que temos o nosso modelo de tópicos, podemos inferir qual é o tópico mais importante para cada documento. Assim, expandimos nossos documentos, nos aproveitamos dos termos mais importantes do seu tópico relativo com o documento, para compor um novo campo no sistema de busca que possa melhorar nossa recuperação de informação.
+_Source: (__Grootendorst, 2022)_
 
-# _3. Critérios de Avaliação_
+The TF-IDF is used to compare the importance of words across all documents in our corpus. Instead, we only deal with the documents in each cluster and then apply the TF-IDF respectively to each cluster as if it were a document (Grootendorst, 2022). The result would be the measure of importance for words within a cluster. The more important words that are within a cluster, the more representative it is for that topic. In other words, if we extract the most important words by cluster, we get topic descriptions. This model is called cluster-based TF-IDF (CTF-ICF) (Grootendorst, 2022).
+
+Once we have our topic model, we can infer which topic is most important for each document. Thus, we expand our documents, taking advantage of the most important terms of their topic relative to the document, to compose a new field in the search system that can improve our information retrieval.
+
+# _3. Assessment Criteria_
 
 ## _3.1. Datasets_
 
-Em 2013, o Instituto de Ciências Matemáticas e da Computação da Universidade de São Paulo (ICMC-USP) tornou disponíveis conjuntos de documentos para avaliação de experimentos computacionais (Rossi, Marcacini, Rezende, 2013). Escolhemos o dataset de computação extraído _Open Directory Project_ (_Dmoz-Computers-500 Collection_) (Netscape _apud_ Rossi, Marcacini, Rezende, 2013). Sua distribuição possui as seguintes características:
+In 2013, the Institute of Mathematics and Computer Sciences of the University of São Paulo (ICMC-USP) made available sets of documents for the evaluation of computational experiments (Rossi, Marcacini, Rezende, 2013). We chose the computing dataset extracted from the _Open Directory Project_ (_Dmoz-Computers-500 Collection_) (Netscape _apud_ Rossi, Marcacini, Rezende, 2013). Its distribution has the following characteristics:
 
-![](RackMultipart20220710-1-a7jhna_html_4ad7f21d10259a42.png)
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/table1.png>
+</div>
 
-_Fonte: (Rossi, Marcacini, Rezende, 2013)_
+_Source: (Rossi, Marcacini, Rezende, 2013)_
 
-Cada documento possui sua classificação. Foram escolhidos 500 documentos estratificados em 19 categorias. São essas classificações que serão usadas para computar a qualidade do nosso information retrieval.
+Each document has its classification. 500 documents were chosen, stratified into 19 categories. It is these ratings that will be used to compute the quality of our information retrieval.
 
-![](RackMultipart20220710-1-a7jhna_html_be83aaabfe28666e.png)
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/table2.png>
+</div>
 
-_Fonte: (Rossi, Marcacini, Rezende, 2013)_
+_Source: (Rossi, Marcacini, Rezende, 2013)_
 
-## _3.2. Métricas_
+## _3.2. Metrics_
 
-Em aplicações de recuperação de informação é necessário ter uma medida de confiança para testar os resultados alcançados. A entropia (incerteza) fornece uma medida valiosa na verificação de sistemas de informação, que é calculado através de conjunto dos K ​​documentos mais bem classificados para uma consulta (Grivola _et_ al., 2005). É esperado que bons resultados de recuperação proporcionem um conjunto de documentos mais homogêneos. Portanto, a entropia do conjunto de documentos deve ser menor quando o desempenho obtido para uma determinada consulta for bom.
+In information retrieval applications it is necessary to have a reliable measure to test the results achieved. Entropy (uncertainty) provides a valuable measure in the verification of information systems, which is calculated through the set of the K highest ranked documents for a query (Grivola _et_ al., 2005). Good retrieval results are expected to provide a more homogeneous set of documents. Therefore, the entropy of the document set should be lower when the performance obtained for a given query is good.
 
-Se a entropia do conjunto for alta, a estrutura linguística dos documentos é altamente variável. Os documentos com uma grande variabilidade linguística geram maior risco de que alguns documentos recuperados sejam irrelevantes. A probabilidade de recuperar documentos irrelevantes aumenta com K (Grivola _et_ al., 2005). Como um único documento longo e não relevante pode causar um aumento significativo na entropia, é aconselhável manter K pequeno (Grivola _et_ al., 2005). Considerando estes fatores, usamos a fórmula seguinte de entropia:
+If the entropy of the set is high, the linguistic structure of the documents is highly variable. Documents with high linguistic variability pose a greater risk that some retrieved documents will be irrelevant. The probability of retrieving irrelevant documents increases with K (Grivola _et_ al., 2005). As a single long, non-relevant document can cause a significant increase in entropy, it is advisable to keep K small (Grivola _et_ al., 2005). Considering these factors, we use the following entropy formula:
 
-Em nossa fórmula do cálculo da entropia _H_, _nf(c)_ representa a frequência normalizada de cada classe recuperada e _K_ é a quantidade de classes encontrada na busca.
+In our entropy calculation formula _H_, _nf(c)_ represents the normalized frequency of each retrieved class and _K_ is the number of classes found in the search.
 
-## _3.4. Experimentos Preliminares_
+# _4. Preliminary Experiments_
 
-Conduzimos nosso experimento em um Jupyter Notebook usando a linguagem Python. Começamos configurando um servidor de Elasticsearch, criando um ambiente de BM25 para realizar nossos testes empíricos. Alimentamos o sistema com os nossos dados textuais originários do dataset _Dmoz-Computers-500_.
+We conducted our experiment in a Jupyter Notebook using the Python language. We started by configuring an Elasticsearch server, creating a BM25 environment to carry out our empirical tests. We feed the system our textual data from the _Dmoz-Computers-500_.
 
-Primeiro, fizemos nosso experimento com nosso modelo baseline, ou seja, nossos documentos originais sem enriquecimento semântico. Testamos apenas uma query (&#39;_neural networks for linux systems_&#39;) no nosso sistema de busca e calculamos a entropia a partir da distribuição das classes no resultado da recuperação de informação. Em seguida, encontramos bi-gramas mais importantes do nosso conjunto de documentos para usarmos cada um deles como uma nova query, reservando os resultados obtidos e o cálculo de entropia para cada uma delas.
+First, we did our experiment with our baseline model, that is, our original documents without semantic enrichment. We tested just one query (&#39;_neural networks for linux systems_&#39;) in our search engine and calculated entropy from the distribution of classes in the information retrieval result. Next, we find the most important bigrams from our set of documents to use each of them as a new query, reserving the results obtained and the entropy calculation for each one.
 
-Na segunda parte do nosso estudo, transformamos nossos dados em modelo de tópicos. Começamos eliminando _stopwords_, depois vetorizamos os nossos documentos. Em seguida, reduzimos a dimensionalidade do nosso espaço vetorial com o algoritmo UMAP e clusterizamos os vetores dos nossos documentos com o algoritmo HDBSCAN. Por fim, criamos um modelo de tópico CTF-ICF. Uma vez que tivemos nosso modelo de tópicos, enriquecemos os documentos com as palavras mais relevantes do tópico mais relevante de cada documento, criando um novo campo no sistema de busca com os termos dos tópicos. Repetimos o processo aplicado para o baseline, mas agora com o novo campo, ou seja, criamos bi-gramas para usar como queries e reservamos os resultados obtidos com nosso modelo enriquecido para calcular e entropia em cada uma das queries.
+In the second part of our study, we transformed our data into a topic model. We start by eliminating _stopwords_, then vectorize our documents. We then reduce the dimensionality of our vector space with the UMAP algorithm and cluster the vectors of our documents with the HDBSCAN algorithm. Finally, we created a CTF-ICF topic template. Once we had our topic model, we enriched the documents with the most relevant words from the most relevant topic in each document, creating a new field in the search system with the topic terms. We repeat the process applied to the baseline, but now with the new field, that is, we create bigrams to use as queries and reserve the results obtained with our enriched model to calculate the entropy in each of the queries.
 
-Assim que tivemos os scores do nosso baseline e nossa hipótese pudemos compará-los.
+Once we had our baseline and our hypothesis we were able to compare them.
 
-![](RackMultipart20220710-1-a7jhna_html_6f61874640054722.png)
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/ir_comparision_github.png>
+</div>
 
-Como podemos observar em nosso gráfico de _boxplot_, a média da entropia dos documentos enriquecidos foi mais baixa do que nosso baseline (0,68 e 0,74 respectivamente), lembrando que quanto menor a entropia melhor o nosso resultado. Além disso, o terceiro quartil obteve score mais baixo nos documentos enriquecidos. Podemos concluir então que o modelo de hipótese, (BERT + topic model) + BM25, melhorou os resultados da busca. No futuro, conduziremos novos experimentos buscando outros parâmetros que poderão gerar resultados ainda melhores.
+As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results. In the future, we will conduct new experiments looking for other parameters that may generate even better results.
 
-# **REFERÊNCIAS BIBLIOGRÁFICAS**
+# **BIBLIOGRAPHIC REFERENCES**
 
-Beiske, K. (2013) &quot;Similarity in elasticsearch,&quot; _Elastic Blog_. Elastic, 26 November. Available at: [https://www.elastic.co/pt/blog/found-similarity-in-elasticsearch](https://www.elastic.co/pt/blog/found-similarity-in-elasticsearch) (Accessed: July 3, 2022).
+Beiske, K. (2013) &quot;Similarity in elasticsearch,&quot; _Elastic Blog_. Elastic, 26 November. Available at: [https://www.elastic.co/en/blog/found-similarity-in-elasticsearch](https://www.elastic.co/pt/blog/found-similarity-in-elasticsearch) (Accessed: July 3, 2022).
 
 Grivolla, J., Jourlin, P. and De Mori, R. (no date) _Automatic classification of queries by expected retrieval performance_, _Grivolla.net_. Available at: [http://www.grivolla.net/articles/sigir2005-qp.pdf](http://www.grivolla.net/articles/sigir2005-qp.pdf) (Accessed: July 3, 2022).
 
-Grootendorst, M. P. (no date) _The algorithm_, _Github.io_. Available at: [https://maartengr.github.io/BERTopic/algorithm/algorithm.html](https://maartengr.github.io/BERTopic/algorithm/algorithm.html) (Accessed: July 3, 2022).
+Grootendorst, MP (no date) _The algorithm_, _Github.io_. Available at: [https://maartengr.github.io/BERTopic/algorithm/algorithm.html](https://maartengr.github.io/BERTopic/algorithm/algorithm.html) (Accessed: July 3, 2022).
 
-Jimenez, S. _et_ al. &#39;BM25-CTF: Improving TF and IDF Factors in BM25 by Using Collection Term Frequencies&#39;. 1 Jan. 2018 : 2887 – 2899. Available at:[https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406\_BM25-CTF\_Improving\_TF\_and\_IDF\_factors\_in\_BM25\_by\_using\_collection\_term\_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-IDF-factors-in-BM25-by-using-collection-term-frequencies.pdf](https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406_BM25-CTF_Improving_TF_and_IDF_factors_in_BM25_by_using_collection_term_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-IDF-factors-in-BM25-by-using-collection-term-frequencies.pdf) (Accessed: July 3, 2022).
+Jimenez, S. _et_ al. &#39;BM25-CTF: Improving TF and IDF Factors in BM25 by Using Collection Term Frequencies&#39;. 1 Jan. 2018 : 2887 – 2899. Available at:[https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406\_BM25-CTF\_Improving\_TF\_and\_IDF\_factors\_in\_BM25\_by\_using\_collection\_term\_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-in-using-factor-by-IDF-25 collection-term-frequencies.pdf](https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406_BM25-CTF_Improving_TF_and_IDF_factors_in_BM25_by_using_collection_term_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-IDF-factors-in-BM25-by-using-collection-term-frequencies.pdf) (Accessed: July 3, 2022).
 
-Kamal, A. (2021) _Building your favourite TV series search engine - Information Retrieval Using BM25 Ranking_, _Medium_. Available at: [https://abishek21.medium.com/building-your-favourite-tv-series-search-engine-information-retrieval-using-bm25-ranking-8e8c54bcdb38](https://abishek21.medium.com/building-your-favourite-tv-series-search-engine-information-retrieval-using-bm25-ranking-8e8c54bcdb38) (Accessed: July 3, 2022).
+Kamal, A. (2021) _Building your favorite TV series search engine - Information Retrieval Using BM25 Ranking_, _Medium_. Available at: [https://abishek21.medium.com/building-your-favourite-tv-series-search-engine-information-retrieval-using-bm25-ranking-8e8c54bcdb38](https://abishek21.medium.com/building-your-favourite-tv-series-search-engine-information-retrieval-using-bm25-ranking-8e8c54bcdb38) (Accessed: July 3, 2022).
 
 Manning, Christopher D., et al. (2008) _Introduction to information retrieval_. Cambridge University Press. Available at: [https://nlp.stanford.edu/IR-book/pdf/irbookonlinereading.pdf](https://nlp.stanford.edu/IR-book/pdf/irbookonlinereading.pdf) (Accessed: July 3, 2022).
 
-Moura, M. F. (2009). &#39;Contribuições para a construção de taxonomias de tópicos em domínios restritos utilizando aprendizado estatístico&#39;. Tese de Doutorado. Instituto de Ciências Matemáticas e da Computação da Universidade de São Paulo (ICMC-USP), São Carlos. Available at:[https://teses.usp.br/teses/disponiveis/55/55134/tde-05042010-162834/publico/MFM\_Tese\_5318963.pdf](https://teses.usp.br/teses/disponiveis/55/55134/tde-05042010-162834/publico/MFM_Tese_5318963.pdf)(Accessed: July 3, 2022).
+Moura, MF (2009). &#39;Contributions to the construction of topic taxonomies in restricted domains using statistical learning&#39;. Doctoral thesis. Institute of Mathematics and Computer Sciences of the University of São Paulo (ICMC-USP), São Carlos. Available at:[https://teses.usp.br/teses/disponiveis/55/55134/tde-05042010-162834/publico/MFM\_Tese\_5318963.pdf](https://teses.usp.br/teses/disponiveis/55/55134/tde-05042010-162834/publico/MFM_Tese_5318963.pdf)(Accessed: July 3, 2022).
 
 Nogueira, R. _et al._ (2019) &quot;Document expansion by query prediction,&quot; _arXiv [cs.IR]_. Available at: [http://arxiv.org/abs/1904.08375](http://arxiv.org/abs/1904.08375) (Accessed: July 3, 2022).
 
@@ -223,3 +217,29 @@ _Open directory project.org: ODP web directory built with the DMOZ RDF database_
 Seitz, R. (no date) _Understanding TF-IDF and BM-25_, _KMW Technology_. Available at: [https://kmwllc.com/index.php/2020/03/20/understanding-tf-idf-and-bm-25/](https://kmwllc.com/index.php/2020/03/20/understanding-tf-idf-and-bm-25/) (Accessed: July 3, 2022).
 
 Yates, A., Nogueira, R., &amp; Lin, J. (2021). Pretrained transformers for text ranking: BERT and beyond. _Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval_. Available at: [https://arxiv.org/pdf/2010.06467v1.pdf](https://arxiv.org/pdf/2010.06467v1.pdf) (Accessed: July 3, 2022).
+
+## Version
+
+0.0.5.0
+
+## Author
+
+* **Guilherme Giuliano Nicolau**: @ggnicolau (<https://github.com/ggnicolau>)
+* **Ricardo Marcondes Marcacini**: @rmarcacini (<https://github.com/rmarcacini>)
+
+</div>
+
+<!--GITHUB_ACTIVITY:{"rows": 5}-->
+
+---
+
+<div align="center">
+
+<br/><br/>
+![Quote](https://github-readme-quotes.herokuapp.com/quote?theme=dark&animation=grow_out_in)
+
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=ggnicolau&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
+
+![https://medium.com/@ggnicolau](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
+
+</div>
