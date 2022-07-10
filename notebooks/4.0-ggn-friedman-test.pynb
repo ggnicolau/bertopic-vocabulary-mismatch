@@ -1,0 +1,667 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Exemplo de TESTE FRIEDMAN.ipynb",
+      "provenance": [],
+      "collapsed_sections": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "J2QYxpofcwTw"
+      },
+      "source": [
+        "# Teste de Friedman + Pós-teste (Nemenyi)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xMpgCAcccR6B",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "outputId": "8ebfdce6-abc6-4d18-daa8-970d70da89f7"
+      },
+      "source": [
+        "!pip install orange3"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/\n",
+            "Collecting orange3\n",
+            "  Downloading Orange3-3.32.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (29.0 MB)\n",
+            "\u001b[K     |████████████████████████████████| 29.0 MB 1.8 MB/s \n",
+            "\u001b[?25hCollecting httpx>=0.21.0\n",
+            "  Downloading httpx-0.23.0-py3-none-any.whl (84 kB)\n",
+            "\u001b[K     |████████████████████████████████| 84 kB 3.5 MB/s \n",
+            "\u001b[?25hCollecting orange-canvas-core<0.2a,>=0.1.24\n",
+            "  Downloading orange_canvas_core-0.1.27-py3-none-any.whl (496 kB)\n",
+            "\u001b[K     |████████████████████████████████| 496 kB 15.8 MB/s \n",
+            "\u001b[?25hCollecting PyQtWebEngine>=5.12\n",
+            "  Downloading PyQtWebEngine-5.15.6-cp37-abi3-manylinux1_x86_64.whl (230 kB)\n",
+            "\u001b[K     |████████████████████████████████| 230 kB 45.1 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: requests in /usr/local/lib/python3.7/dist-packages (from orange3) (2.23.0)\n",
+            "Requirement already satisfied: openpyxl in /usr/local/lib/python3.7/dist-packages (from orange3) (3.0.10)\n",
+            "Collecting pygments>=2.8.0\n",
+            "  Downloading Pygments-2.12.0-py3-none-any.whl (1.1 MB)\n",
+            "\u001b[K     |████████████████████████████████| 1.1 MB 38.5 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: xlrd>=0.9.2 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.1.0)\n",
+            "Requirement already satisfied: setuptools>=41.0.0 in /usr/local/lib/python3.7/dist-packages (from orange3) (57.4.0)\n",
+            "Requirement already satisfied: numpy>=1.17.3 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.21.6)\n",
+            "Collecting orange-widget-base>=4.16.1\n",
+            "  Downloading orange_widget_base-4.17.0-py3-none-any.whl (253 kB)\n",
+            "\u001b[K     |████████████████████████████████| 253 kB 31.2 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: joblib>=0.11 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.1.0)\n",
+            "Collecting baycomp>=1.0.2\n",
+            "  Downloading baycomp-1.0.2-py3-none-any.whl (17 kB)\n",
+            "Collecting keyrings.alt\n",
+            "  Downloading keyrings.alt-4.1.0-py3-none-any.whl (20 kB)\n",
+            "Collecting keyring\n",
+            "  Downloading keyring-23.6.0-py3-none-any.whl (34 kB)\n",
+            "Requirement already satisfied: scikit-learn>=1.0.1 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.0.2)\n",
+            "Collecting AnyQt>=0.0.13\n",
+            "  Downloading AnyQt-0.1.1-py3-none-any.whl (53 kB)\n",
+            "\u001b[K     |████████████████████████████████| 53 kB 1.2 MB/s \n",
+            "\u001b[?25hCollecting bottleneck>=1.3.2\n",
+            "  Downloading Bottleneck-1.3.5-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (355 kB)\n",
+            "\u001b[K     |████████████████████████████████| 355 kB 49.3 MB/s \n",
+            "\u001b[?25hCollecting pyqtgraph!=0.12.4,>=0.11.1\n",
+            "  Downloading pyqtgraph-0.12.3-py3-none-any.whl (992 kB)\n",
+            "\u001b[K     |████████████████████████████████| 992 kB 59.3 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: pip>=18.0 in /usr/local/lib/python3.7/dist-packages (from orange3) (21.1.3)\n",
+            "Requirement already satisfied: pyyaml in /usr/local/lib/python3.7/dist-packages (from orange3) (3.13)\n",
+            "Requirement already satisfied: pandas>=1.3.0 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.3.5)\n",
+            "Collecting serverfiles\n",
+            "  Downloading serverfiles-0.3.1.tar.gz (11 kB)\n",
+            "Requirement already satisfied: chardet>=3.0.2 in /usr/local/lib/python3.7/dist-packages (from orange3) (3.0.4)\n",
+            "Collecting PyQt5!=5.15.1,>=5.12\n",
+            "  Downloading PyQt5-5.15.7-cp37-abi3-manylinux1_x86_64.whl (8.4 MB)\n",
+            "\u001b[K     |████████████████████████████████| 8.4 MB 14.7 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: matplotlib>=2.2.5 in /usr/local/lib/python3.7/dist-packages (from orange3) (3.2.2)\n",
+            "Collecting xlsxwriter\n",
+            "  Downloading XlsxWriter-3.0.3-py3-none-any.whl (149 kB)\n",
+            "\u001b[K     |████████████████████████████████| 149 kB 20.0 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: networkx in /usr/local/lib/python3.7/dist-packages (from orange3) (2.6.3)\n",
+            "Requirement already satisfied: python-louvain>=0.13 in /usr/local/lib/python3.7/dist-packages (from orange3) (0.16)\n",
+            "Requirement already satisfied: qtconsole>=4.7.2 in /usr/local/lib/python3.7/dist-packages (from orange3) (5.3.1)\n",
+            "Collecting openTSNE>=0.6.1\n",
+            "  Downloading openTSNE-0.6.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.5 MB)\n",
+            "\u001b[K     |████████████████████████████████| 2.5 MB 31.4 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: scipy>=1.3.1 in /usr/local/lib/python3.7/dist-packages (from orange3) (1.4.1)\n",
+            "Collecting rfc3986[idna2008]<2,>=1.3\n",
+            "  Downloading rfc3986-1.5.0-py2.py3-none-any.whl (31 kB)\n",
+            "Collecting httpcore<0.16.0,>=0.15.0\n",
+            "  Downloading httpcore-0.15.0-py3-none-any.whl (68 kB)\n",
+            "\u001b[K     |████████████████████████████████| 68 kB 3.1 MB/s \n",
+            "\u001b[?25hCollecting sniffio\n",
+            "  Downloading sniffio-1.2.0-py3-none-any.whl (10 kB)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.7/dist-packages (from httpx>=0.21.0->orange3) (2022.6.15)\n",
+            "Collecting h11<0.13,>=0.11\n",
+            "  Downloading h11-0.12.0-py3-none-any.whl (54 kB)\n",
+            "\u001b[K     |████████████████████████████████| 54 kB 1.2 MB/s \n",
+            "\u001b[?25hCollecting anyio==3.*\n",
+            "  Downloading anyio-3.6.1-py3-none-any.whl (80 kB)\n",
+            "\u001b[K     |████████████████████████████████| 80 kB 5.6 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from anyio==3.*->httpcore<0.16.0,>=0.15.0->httpx>=0.21.0->orange3) (4.1.1)\n",
+            "Requirement already satisfied: idna>=2.8 in /usr/local/lib/python3.7/dist-packages (from anyio==3.*->httpcore<0.16.0,>=0.15.0->httpx>=0.21.0->orange3) (2.10)\n",
+            "Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=2.2.5->orange3) (1.4.3)\n",
+            "Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=2.2.5->orange3) (3.0.9)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=2.2.5->orange3) (0.11.0)\n",
+            "Requirement already satisfied: python-dateutil>=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=2.2.5->orange3) (2.8.2)\n",
+            "Collecting dictdiffer\n",
+            "  Downloading dictdiffer-0.9.0-py2.py3-none-any.whl (16 kB)\n",
+            "Collecting qasync\n",
+            "  Downloading qasync-0.23.0-py3-none-any.whl (13 kB)\n",
+            "Collecting commonmark>=0.8.1\n",
+            "  Downloading commonmark-0.9.1-py2.py3-none-any.whl (51 kB)\n",
+            "\u001b[K     |████████████████████████████████| 51 kB 2.5 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from orange-canvas-core<0.2a,>=0.1.24->orange3) (4.11.4)\n",
+            "Requirement already satisfied: docutils in /usr/local/lib/python3.7/dist-packages (from orange-canvas-core<0.2a,>=0.1.24->orange3) (0.17.1)\n",
+            "Requirement already satisfied: cachecontrol[filecache] in /usr/local/lib/python3.7/dist-packages (from orange-canvas-core<0.2a,>=0.1.24->orange3) (0.12.11)\n",
+            "Requirement already satisfied: pytz>=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas>=1.3.0->orange3) (2022.1)\n",
+            "Collecting PyQt5-sip<13,>=12.11\n",
+            "  Downloading PyQt5_sip-12.11.0-cp37-cp37m-manylinux1_x86_64.whl (344 kB)\n",
+            "\u001b[K     |████████████████████████████████| 344 kB 29.0 MB/s \n",
+            "\u001b[?25hCollecting PyQt5-Qt5>=5.15.0\n",
+            "  Downloading PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl (59.9 MB)\n",
+            "\u001b[K     |████████████████████████████████| 59.9 MB 84 kB/s \n",
+            "\u001b[?25hCollecting PyQtWebEngine-Qt5>=5.15.0\n",
+            "  Downloading PyQtWebEngine_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl (67.5 MB)\n",
+            "\u001b[K     |████████████████████████████████| 67.5 MB 100 kB/s \n",
+            "\u001b[?25hRequirement already satisfied: six>=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil>=2.1->matplotlib>=2.2.5->orange3) (1.15.0)\n",
+            "Requirement already satisfied: ipython-genutils in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (0.2.0)\n",
+            "Requirement already satisfied: jupyter-client>=4.1 in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (5.3.5)\n",
+            "Requirement already satisfied: qtpy>=2.0.1 in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (2.1.0)\n",
+            "Requirement already satisfied: pyzmq>=17.1 in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (23.1.0)\n",
+            "Requirement already satisfied: traitlets!=5.2.1,!=5.2.2 in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (5.1.1)\n",
+            "Requirement already satisfied: ipykernel>=4.1 in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (4.10.1)\n",
+            "Requirement already satisfied: jupyter-core in /usr/local/lib/python3.7/dist-packages (from qtconsole>=4.7.2->orange3) (4.10.0)\n",
+            "Requirement already satisfied: ipython>=4.0.0 in /usr/local/lib/python3.7/dist-packages (from ipykernel>=4.1->qtconsole>=4.7.2->orange3) (5.5.0)\n",
+            "Requirement already satisfied: tornado>=4.0 in /usr/local/lib/python3.7/dist-packages (from ipykernel>=4.1->qtconsole>=4.7.2->orange3) (5.1.1)\n",
+            "Requirement already satisfied: prompt-toolkit<2.0.0,>=1.0.4 in /usr/local/lib/python3.7/dist-packages (from ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (1.0.18)\n",
+            "Requirement already satisfied: simplegeneric>0.8 in /usr/local/lib/python3.7/dist-packages (from ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (0.8.1)\n",
+            "Requirement already satisfied: pickleshare in /usr/local/lib/python3.7/dist-packages (from ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (0.7.5)\n",
+            "Requirement already satisfied: pexpect in /usr/local/lib/python3.7/dist-packages (from ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (4.8.0)\n",
+            "Requirement already satisfied: decorator in /usr/local/lib/python3.7/dist-packages (from ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (4.4.2)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.7/dist-packages (from prompt-toolkit<2.0.0,>=1.0.4->ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (0.2.5)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.7/dist-packages (from qtpy>=2.0.1->qtconsole>=4.7.2->orange3) (21.3)\n",
+            "Requirement already satisfied: threadpoolctl>=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn>=1.0.1->orange3) (3.1.0)\n",
+            "Requirement already satisfied: msgpack>=0.5.2 in /usr/local/lib/python3.7/dist-packages (from cachecontrol[filecache]->orange-canvas-core<0.2a,>=0.1.24->orange3) (1.0.4)\n",
+            "Collecting lockfile>=0.9\n",
+            "  Downloading lockfile-0.12.2-py2.py3-none-any.whl (13 kB)\n",
+            "Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata->orange-canvas-core<0.2a,>=0.1.24->orange3) (3.8.0)\n",
+            "Collecting SecretStorage>=3.2\n",
+            "  Downloading SecretStorage-3.3.2-py3-none-any.whl (15 kB)\n",
+            "Collecting jeepney>=0.4.2\n",
+            "  Downloading jeepney-0.8.0-py3-none-any.whl (48 kB)\n",
+            "\u001b[K     |████████████████████████████████| 48 kB 5.7 MB/s \n",
+            "\u001b[?25hCollecting cryptography>=2.0\n",
+            "  Downloading cryptography-37.0.4-cp36-abi3-manylinux_2_24_x86_64.whl (4.1 MB)\n",
+            "\u001b[K     |████████████████████████████████| 4.1 MB 52.1 MB/s \n",
+            "\u001b[?25hRequirement already satisfied: cffi>=1.12 in /usr/local/lib/python3.7/dist-packages (from cryptography>=2.0->SecretStorage>=3.2->keyring->orange3) (1.15.0)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.7/dist-packages (from cffi>=1.12->cryptography>=2.0->SecretStorage>=3.2->keyring->orange3) (2.21)\n",
+            "Requirement already satisfied: et-xmlfile in /usr/local/lib/python3.7/dist-packages (from openpyxl->orange3) (1.1.0)\n",
+            "Requirement already satisfied: ptyprocess>=0.5 in /usr/local/lib/python3.7/dist-packages (from pexpect->ipython>=4.0.0->ipykernel>=4.1->qtconsole>=4.7.2->orange3) (0.7.0)\n",
+            "Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests->orange3) (1.24.3)\n",
+            "Building wheels for collected packages: serverfiles\n",
+            "  Building wheel for serverfiles (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for serverfiles: filename=serverfiles-0.3.1-py3-none-any.whl size=6948 sha256=67cbf5190af3c82c3139a77f71b5014af5c031de7ecb3dc6e5210c76c9404f4d\n",
+            "  Stored in directory: /root/.cache/pip/wheels/f4/36/15/fcfe21874746d5cd17c18b1e5501fbf86544da90d4ab6afe17\n",
+            "Successfully built serverfiles\n",
+            "Installing collected packages: sniffio, pygments, lockfile, rfc3986, qasync, PyQt5-sip, PyQt5-Qt5, jeepney, h11, dictdiffer, cryptography, commonmark, AnyQt, anyio, SecretStorage, PyQtWebEngine-Qt5, pyqtgraph, PyQt5, orange-canvas-core, httpcore, xlsxwriter, serverfiles, PyQtWebEngine, orange-widget-base, openTSNE, keyrings.alt, keyring, httpx, bottleneck, baycomp, orange3\n",
+            "  Attempting uninstall: pygments\n",
+            "    Found existing installation: Pygments 2.6.1\n",
+            "    Uninstalling Pygments-2.6.1:\n",
+            "      Successfully uninstalled Pygments-2.6.1\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "datascience 0.10.6 requires folium==0.2.1, but you have folium 0.8.3 which is incompatible.\u001b[0m\n",
+            "Successfully installed AnyQt-0.1.1 PyQt5-5.15.7 PyQt5-Qt5-5.15.2 PyQt5-sip-12.11.0 PyQtWebEngine-5.15.6 PyQtWebEngine-Qt5-5.15.2 SecretStorage-3.3.2 anyio-3.6.1 baycomp-1.0.2 bottleneck-1.3.5 commonmark-0.9.1 cryptography-37.0.4 dictdiffer-0.9.0 h11-0.12.0 httpcore-0.15.0 httpx-0.23.0 jeepney-0.8.0 keyring-23.6.0 keyrings.alt-4.1.0 lockfile-0.12.2 openTSNE-0.6.2 orange-canvas-core-0.1.27 orange-widget-base-4.17.0 orange3-3.32.0 pygments-2.12.0 pyqtgraph-0.12.3 qasync-0.23.0 rfc3986-1.5.0 serverfiles-0.3.1 sniffio-1.2.0 xlsxwriter-3.0.3\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "application/vnd.colab-display-data+json": {
+              "pip_warning": {
+                "packages": [
+                  "pygments"
+                ]
+              }
+            }
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Dados de entrada do teste\n",
+        "\n",
+        "Uma tabela m x n\n",
+        "\n",
+        "m = linhas dos métodos (sugiro baseline + 2 variações da proposta mudando embeddings), totalizando 3 métodos.\n",
+        "\n",
+        "n = coluna dos datasets\n",
+        "\n",
+        "células: valores MÉDIOS das entropias"
+      ],
+      "metadata": {
+        "id": "hCjn0NTRi1ii"
+      }
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "B5dix5bDSJZc"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "dataset = '''method\t40er\tbbc\tgoldstandard\tgooglenews\tnewscluster\n",
+        "DeepWalk\t0.6290343909\t0.4042414692\t0.5082462224\t0.6221345956\t0.5067586872\n",
+        "GAT\t0.5935115572\t0.3765493556\t0.4796654012\t0.5059225215\t0.474806259\n",
+        "GNEE\t0.7443477975\t0.6338181732\t0.6756015947\t0.9581423339\t0.2744622448\n",
+        "GCN\t0.638\t0.458\t0.548\t0.617\t0.519\n",
+        "Node2Vec\t0.630242628\t0.427887937\t0.5464697267\t0.5844748965\t0.5079774731\n",
+        "Struct2Vec\t0.4146780181\t0.1864334353\t0.0886382174\t0.3110037669\t0.06557059975'''.split(\"\\n\")\n",
+        "\n",
+        "\n",
+        "\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Gerando Ranking\n",
+        "\n",
+        "Para cada dataset, ordenar os métodos num ranking médio.\n",
+        "\n",
+        "Se quando menor = melhor, então o ascendig=True.\n",
+        "\n",
+        "No exemplo abaixo, era F1 (então quanto maior=melhor)"
+      ],
+      "metadata": {
+        "id": "7qECdHytjKgi"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "L = []\n",
+        "for i in list(range(1,len(dataset))):\n",
+        "  T = []\n",
+        "  for item in dataset[i].split(\"\\t\"): T.append(item)\n",
+        "  L.append(T)\n",
+        "\n",
+        "df = pd.DataFrame(L)\n",
+        "df.columns = dataset[0].split(\"\\t\")\n",
+        "\n",
+        "df['40er_rank'] = df['40er'].rank(method='average',ascending=False)\n",
+        "df['bbc_rank'] = df['bbc'].rank(method='average',ascending=False)\n",
+        "df['goldstandard_rank'] = df['goldstandard'].rank(method='average',ascending=False)\n",
+        "df['googlenews_rank'] = df['googlenews'].rank(method='average',ascending=False)\n",
+        "df['newscluster_rank'] = df['newscluster'].rank(method='average',ascending=False)\n",
+        "\n",
+        "df['average_rank'] = (df['40er_rank']+df['bbc_rank']+df['goldstandard_rank']+df['googlenews_rank']+df['newscluster_rank'])/5\n",
+        "df"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 237
+        },
+        "id": "Up-xKptdjJvK",
+        "outputId": "30f6520e-da13-4451-ea05-8e34e478c6ba"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "       method          40er           bbc  goldstandard    googlenews  \\\n",
+              "0    DeepWalk  0.6290343909  0.4042414692  0.5082462224  0.6221345956   \n",
+              "1         GAT  0.5935115572  0.3765493556  0.4796654012  0.5059225215   \n",
+              "2        GNEE  0.7443477975  0.6338181732  0.6756015947  0.9581423339   \n",
+              "3         GCN         0.638         0.458         0.548         0.617   \n",
+              "4    Node2Vec   0.630242628   0.427887937  0.5464697267  0.5844748965   \n",
+              "5  Struct2Vec  0.4146780181  0.1864334353  0.0886382174  0.3110037669   \n",
+              "\n",
+              "     newscluster  40er_rank  bbc_rank  goldstandard_rank  googlenews_rank  \\\n",
+              "0   0.5067586872        4.0       4.0                4.0              2.0   \n",
+              "1    0.474806259        5.0       5.0                5.0              5.0   \n",
+              "2   0.2744622448        1.0       1.0                1.0              1.0   \n",
+              "3          0.519        2.0       2.0                2.0              3.0   \n",
+              "4   0.5079774731        3.0       3.0                3.0              4.0   \n",
+              "5  0.06557059975        6.0       6.0                6.0              6.0   \n",
+              "\n",
+              "   newscluster_rank  average_rank  \n",
+              "0               3.0           3.4  \n",
+              "1               4.0           4.8  \n",
+              "2               5.0           1.8  \n",
+              "3               1.0           2.0  \n",
+              "4               2.0           3.0  \n",
+              "5               6.0           6.0  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-ce5ed898-8803-4367-8a70-c93d8fabdef0\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>method</th>\n",
+              "      <th>40er</th>\n",
+              "      <th>bbc</th>\n",
+              "      <th>goldstandard</th>\n",
+              "      <th>googlenews</th>\n",
+              "      <th>newscluster</th>\n",
+              "      <th>40er_rank</th>\n",
+              "      <th>bbc_rank</th>\n",
+              "      <th>goldstandard_rank</th>\n",
+              "      <th>googlenews_rank</th>\n",
+              "      <th>newscluster_rank</th>\n",
+              "      <th>average_rank</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>DeepWalk</td>\n",
+              "      <td>0.6290343909</td>\n",
+              "      <td>0.4042414692</td>\n",
+              "      <td>0.5082462224</td>\n",
+              "      <td>0.6221345956</td>\n",
+              "      <td>0.5067586872</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>3.4</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>GAT</td>\n",
+              "      <td>0.5935115572</td>\n",
+              "      <td>0.3765493556</td>\n",
+              "      <td>0.4796654012</td>\n",
+              "      <td>0.5059225215</td>\n",
+              "      <td>0.474806259</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>4.8</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>GNEE</td>\n",
+              "      <td>0.7443477975</td>\n",
+              "      <td>0.6338181732</td>\n",
+              "      <td>0.6756015947</td>\n",
+              "      <td>0.9581423339</td>\n",
+              "      <td>0.2744622448</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>5.0</td>\n",
+              "      <td>1.8</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>GCN</td>\n",
+              "      <td>0.638</td>\n",
+              "      <td>0.458</td>\n",
+              "      <td>0.548</td>\n",
+              "      <td>0.617</td>\n",
+              "      <td>0.519</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>2.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>Node2Vec</td>\n",
+              "      <td>0.630242628</td>\n",
+              "      <td>0.427887937</td>\n",
+              "      <td>0.5464697267</td>\n",
+              "      <td>0.5844748965</td>\n",
+              "      <td>0.5079774731</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>3.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>Struct2Vec</td>\n",
+              "      <td>0.4146780181</td>\n",
+              "      <td>0.1864334353</td>\n",
+              "      <td>0.0886382174</td>\n",
+              "      <td>0.3110037669</td>\n",
+              "      <td>0.06557059975</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>6.0</td>\n",
+              "      <td>6.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-ce5ed898-8803-4367-8a70-c93d8fabdef0')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-ce5ed898-8803-4367-8a70-c93d8fabdef0 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-ce5ed898-8803-4367-8a70-c93d8fabdef0');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Imprimindo average_ranking"
+      ],
+      "metadata": {
+        "id": "fJtWTBCZjj-7"
+      }
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9_tm5AbXT3yq",
+        "outputId": "7e4956ee-6ad6-4a8d-b07b-1da622fce78b"
+      },
+      "source": [
+        "print(df.method.values)\n",
+        "print(df.average_rank.values)\n"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "['DeepWalk' 'GAT' 'GNEE' 'GCN' 'Node2Vec' 'Struct2Vec']\n",
+            "[3.4 4.8 1.8 2.  3.  6. ]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "fyVUnfRHcr7i"
+      },
+      "source": [
+        "# Rodando o teste estatístico\n",
+        "\n",
+        "Usar o arquivo PDF para o paper"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-ODzJTbMcLgT",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 181
+        },
+        "outputId": "75a08206-79e1-4f2c-9d7e-d6faaea0ea35"
+      },
+      "source": [
+        "import Orange\n",
+        "\n",
+        "import matplotlib.pyplot as plt\n",
+        "# Algoritmos\n",
+        "names = df.method.values\n",
+        "plt.figure(figsize=(2, 2))\n",
+        "# Ranking Medio\n",
+        "avranks =  df.average_rank.values\n",
+        "\n",
+        "# Num. de datasets:\n",
+        "datasets = 5\n",
+        "\n",
+        "cd = Orange.evaluation.compute_CD(avranks, datasets)\n",
+        "\n",
+        "Orange.evaluation.graph_ranks(avranks, names, cd=cd, width=10, textspace=2.5)\n",
+        "\n",
+        "plt.draw()\n",
+        "plt.savefig(\"eval1.pdf\",pad_inches=0)\n",
+        "\n",
+        "\n",
+        "plt.show()\n",
+        "plt.close()"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 144x144 with 0 Axes>"
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 720x133.2 with 1 Axes>"
+            ],
+            "image/png": "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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Entendendo o diagrama\n",
+        "\n",
+        "Os métodos são ordenados em um ranking médio.\n",
+        "\n",
+        "O teste de friedman calcula qual é a diferença mínima no ranking para que se possa afirmar que um método é superior a outro. Essa diferença se chama CD (critical difference).\n",
+        "\n",
+        "Linhas conectam métodos sem CD significativo.\n",
+        "\n",
+        "No exemplo acima, apenas GNEE é superior ao Struct2Vec"
+      ],
+      "metadata": {
+        "id": "iCZ4TEzzj5ZB"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "XMwzZXjrkmUn"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
