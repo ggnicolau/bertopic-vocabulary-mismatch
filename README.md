@@ -114,10 +114,10 @@ For this, we use the _BERTopic_ library framework (Grootendorst, 2022) to create
 
 <div align="center">
 <img src=https://maartengr.github.io/BERTopic/img/algorithm.png>
+Source: (Grootendorst, 2022)
 </div>
 
-_Source: (__Grootendorst, 2022)_
-
+\
 At first, we took advantage of a _embeddings_ to project our documents in this vector space and extract their vectors using the _sentence-bert_. The pre-trained model is used to improve the quality of our vectors than would be the case if we only used our document set to constitute our vector space (Nogueira _et al_, 2019).
 
 In a second moment, the UMAP algorithm is applied to reduce the dimensionality of our vector space. Then, the HDBSCAN algorithm is applied to cluster our documents (Grootendorst, 2022).
@@ -126,9 +126,10 @@ Finally, we apply the CTF-ICF formula (a variation of the TF-IDF formula) to the
 
 <div align="center">
 <img src=https://maartengr.github.io/BERTopic/img/ctfidf.png>
+Source: (Grootendorst, 2022)
+</div>
 
-_Source: (__Grootendorst, 2022)_
-
+\
 The TF-IDF is used to compare the importance of words across all documents in our corpus. Instead, we only deal with the documents in each cluster and then apply the TF-IDF respectively to each cluster as if it were a document (Grootendorst, 2022). The result would be the measure of importance for words within a cluster. The more important words that are within a cluster, the more representative it is for that topic. In other words, if we extract the most important words by cluster, we get topic descriptions. This model is called cluster-based TF-IDF (CTF-ICF) (Grootendorst, 2022).
 
 Once we have our topic model, we can infer which topic is most important for each document. Thus, we expand our documents, taking advantage of the most important terms of their topic relative to the document, to compose a new field in the search system that can improve our information retrieval.
@@ -141,17 +142,16 @@ In 2013, the Institute of Mathematics and Computer Sciences of the University of
 
 <div align="center">
 <img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/table1.png>
+Source: (Rossi, Marcacini, Rezende, 2013)
 </div>
 
-_Source: (Rossi, Marcacini, Rezende, 2013)_
-
+\
 Each document has its classification. 500 documents were chosen, stratified into 19 categories. It is these ratings that will be used to compute the quality of our information retrieval.
 
 <div align="center">
 <img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/table2.png>
+Source: (Rossi, Marcacini, Rezende, 2013)
 </div>
-
-_Source: (Rossi, Marcacini, Rezende, 2013)_
 
 ## _3.2. Metrics_
 
