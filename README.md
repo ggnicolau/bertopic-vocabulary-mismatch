@@ -222,11 +222,6 @@ Yates, A., Nogueira, R., &amp; Lin, J. (2021). Pretrained transformers for text 
 
 <div align="center">
 
-<br/><br/>
-![Quote](https://github-readme-quotes.herokuapp.com/quote?theme=dark&animation=grow_out_in)
-
----
-
 ![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=ggnicolau&show_icons=true&theme=darcula)
 
 <!--GITHUB_ACTIVITY:{"rows": 5}-->
@@ -236,5 +231,10 @@ Yates, A., Nogueira, R., &amp; Lin, J. (2021). Pretrained transformers for text 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=ggnicolau&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
 
 ![https://medium.com/@ggnicolau](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
+
+---
+![Quote](https://github-readme-quotes.herokuapp.com/quote?theme=dark&animation=grow_out_in)
+
+---
 
 </div>
