@@ -159,6 +159,10 @@ In information retrieval applications it is necessary to have a reliable measure
 
 If the entropy of the set is high, the linguistic structure of the documents is highly variable. Documents with high linguistic variability pose a greater risk that some retrieved documents will be irrelevant. The probability of retrieving irrelevant documents increases with K (Grivola _et_ al., 2005). As a single long, non-relevant document can cause a significant increase in entropy, it is advisable to keep K small (Grivola _et_ al., 2005). Considering these factors, we use the following entropy formula:
 
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/entropy.png>
+</div>
+
 In our entropy calculation formula _H_, _nf(c)_ represents the normalized frequency of each retrieved class and _K_ is the number of classes found in the search.
 
 # _4. Preliminary Experiments_
