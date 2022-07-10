@@ -134,7 +134,7 @@ The TF-IDF is used to compare the importance of words across all documents in ou
 
 Once we have our topic model, we can infer which topic is most important for each document. Thus, we expand our documents, taking advantage of the most important terms of their topic relative to the document, to compose a new field in the search system that can improve our information retrieval.
 
-# _3. Assessment Criteria_
+# _3. Evaluation Criteria_
 
 ## _3.1. Datasets_
 
@@ -179,7 +179,10 @@ Once we had our baseline and our hypothesis we were able to compare them.
 <img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/ir_comparision_github.png>
 </div>
 
-As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results. In the future, we will conduct new experiments looking for other parameters that may generate even better results.
+As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results.
+
+In the future, we will conduct new experiments looking for other parameters that may generate even better results. Further, we will also conduct experiments on more datasets. Thus, we will do a statistical analysis of the results obtained using Friedman Test, to check if the improvement is relevant.
+
 
 # **BIBLIOGRAPHIC REFERENCES**
 
