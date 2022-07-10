@@ -95,13 +95,13 @@ The entropy metric will be used to compare the results of (a) and (b).
 We need to find the relevance of query terms and documents to constitute a search engine (RI). &quot;Word count&quot; is not a sufficient metric to find the relevance of terms. Generally, the terms that appear the most are irrelevant, such as conjunctions (a, o, da, do etc) (Jimenez _et_ al, 2018, p.2888). One way around this and finding the most relevant terms is through algorithms like TF-IDF (_term frequency–inverse document frequency_). Thus, we were able to filter the terms that appear a lot in all documents, because we understand that they are irrelevant; as a consequence, we give greater weight to the terms that appear a lot in some documents and we can see their distribution throughout the corpus of documents.
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/tfidf.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/tfidf.png>
 </div>
 
 While TF-IDF as a vector model favors the frequency of terms and penalizes the frequency of documents, it also disregards the size of the documents and the saturation of the frequency of the terms (Seitz, 2022). Another model, called BM25, is a proposal to solve this limitation using a probabilistic model. Thus, while the term frequency is controlled by a saturation function to prevent its linear growth, the parameter used to calculate the average size of documents penalizes long documents with a high frequency of search terms (Jimenez _et_ al, 2018, p. 2888).
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/bm25.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/bm25.png>
 </div>
 
 BM25 is the most used algorithm in search engines due to its _tradeoff_ of accuracy and computational performance, incorporated in systems based on Lucene (such as Elasticsearch and Solr).
