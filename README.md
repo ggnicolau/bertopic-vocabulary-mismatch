@@ -71,13 +71,13 @@ Project Organization
 
 # _1. Introduction and research problem_
 
-We started from the &quot;_vocabulary mismatch_&quot; problem in which users use different query terms from those used in relevant documents. This is one of the central challenges in information retrieval (_Information Retrieval_) (Nogueira _et_ al, 2019, p.1).
+We started from the &quot;_vocabulary mismatch_&quot; problem in which users use different query terms from those used in relevant documents. This is one of the central challenges in _Information Retrieval_ (Nogueira _et_ al, 2019, p.1).
 
 Our goal is to improve the information retrieval (IR) of a search engine for a specific situation. We start from the hypothesis that, if a user is interested in a specific document from a group, he is also interested in returning other documents from the same group (Moura, 2009, p.17 _apud_ Chakrabarti, 2003; Kobayashi and Aono, 2004).
 
 Our proposal was to use a document expansion technique with terms that are representative of the content of the documents, composing a new field in the search system with the extracted terms. We created this field by modeling topics from our documents enhanced by pre-trained embeddings (BERT) models.
 
-For this, we created an experimental environment that uses Elasticsearch for information retrieval. Elasticsearch is based on the BM25 algorithm (a classic TF-IDF-based IR algorithm) (Beiske, 2013). In this sense, we get a _framework_ that is composed of (BERT + topic template) + BM25.
+For this, we created an experimental environment that uses Elasticsearch for information retrieval. Elasticsearch is based on the BM25 algorithm (a classic TF-IDF-based IR algorithm) (Beiske, 2013). In this sense, we get a _framework_ that is composed of (BERT + topic model) + BM25.
 
 # _2. Methodology_
 
@@ -171,7 +171,7 @@ We conducted our experiment in a Jupyter Notebook using the Python language. We 
 
 First, we did our experiment with our baseline model, that is, our original documents without semantic enrichment. We tested just one query (&#39;_neural networks for linux systems_&#39;) in our search engine and calculated entropy from the distribution of classes in the information retrieval result. Next, we find the most important bigrams from our set of documents to use each of them as a new query, reserving the results obtained and the entropy calculation for each one.
 
-In the second part of our study, we transformed our data into a topic model. We start by eliminating _stopwords_, then vectorize our documents. We then reduce the dimensionality of our vector space with the UMAP algorithm and cluster the vectors of our documents with the HDBSCAN algorithm. Finally, we created a CTF-ICF topic template. Once we had our topic model, we enriched the documents with the most relevant words from the most relevant topic in each document, creating a new field in the search system with the topic terms. We repeat the process applied to the baseline, but now with the new field, that is, we create bigrams to use as queries and reserve the results obtained with our enriched model to calculate the entropy in each of the queries.
+In the second part of our study, we transformed our data into a topic model. We start by eliminating _stopwords_, then vectorize our documents. We then reduce the dimensionality of our vector space with the UMAP algorithm and cluster the vectors of our documents with the HDBSCAN algorithm. Finally, we created a CTF-ICF topic model. Once we had our topic model, we enriched the documents with the most relevant words from the most relevant topic in each document, creating a new field in the search system with the topic terms. We repeat the process applied to the baseline, but now with the new field, that is, we create bigrams to use as queries and reserve the results obtained with our enriched model to calculate the entropy in each of the queries.
 
 Once we had our baseline and our hypothesis we were able to compare them.
 
