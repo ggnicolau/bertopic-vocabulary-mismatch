@@ -71,7 +71,7 @@ Project Organization
 
 # _1. Introduction and research problem_
 
-We started from the vocabulary mismatch problem (&quot;_vocabulary mismatch_&quot;) in which users use different query terms from those used in relevant documents. This is one of the central challenges in information retrieval (_Information Retrieval_) (Nogueira _et_ al, 2019, p.1).
+We started from the &quot;_vocabulary mismatch_&quot; problem in which users use different query terms from those used in relevant documents. This is one of the central challenges in information retrieval (_Information Retrieval_) (Nogueira _et_ al, 2019, p.1).
 
 Our goal is to improve the information retrieval (IR) of a search engine for a specific situation. We start from the hypothesis that, if a user is interested in a specific document from a group, he is also interested in returning other documents from the same group (Moura, 2009, p.17 _apud_ Chakrabarti, 2003; Kobayashi and Aono, 2004).
 
