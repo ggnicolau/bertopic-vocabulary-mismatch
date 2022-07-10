@@ -140,7 +140,7 @@ Once we have our topic model, we can infer which topic is most important for eac
 In 2013, the Institute of Mathematics and Computer Sciences of the University of São Paulo (ICMC-USP) made available sets of documents for the evaluation of computational experiments (Rossi, Marcacini, Rezende, 2013). We chose the computing dataset extracted from the _Open Directory Project_ (_Dmoz-Computers-500 Collection_) (Netscape _apud_ Rossi, Marcacini, Rezende, 2013). Its distribution has the following characteristics:
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/table1.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/table1.png>
 </div>
 
 _Source: (Rossi, Marcacini, Rezende, 2013)_
@@ -148,7 +148,7 @@ _Source: (Rossi, Marcacini, Rezende, 2013)_
 Each document has its classification. 500 documents were chosen, stratified into 19 categories. It is these ratings that will be used to compute the quality of our information retrieval.
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/table2.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/table2.png>
 </div>
 
 _Source: (Rossi, Marcacini, Rezende, 2013)_
@@ -172,7 +172,7 @@ In the second part of our study, we transformed our data into a topic model. We 
 Once we had our baseline and our hypothesis we were able to compare them.
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/tree/main/reports/figures/ir_comparision_github.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/ir_comparision_github.png>
 </div>
 
 As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results. In the future, we will conduct new experiments looking for other parameters that may generate even better results.
