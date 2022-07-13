@@ -51,6 +51,7 @@ Project Organization
 * sentence-transformers
 * umap-learn
 * hdbscan
+* bertopic
 
 #### Technologies
 
@@ -189,7 +190,7 @@ Beiske, K. (2013) &quot;Similarity in elasticsearch,&quot; _Elastic Blog_. Elast
 
 Grivolla, J., Jourlin, P. and De Mori, R. (no date) _Automatic classification of queries by expected retrieval performance_, _Grivolla.net_. Available at: [http://www.grivolla.net/articles/sigir2005-qp.pdf](http://www.grivolla.net/articles/sigir2005-qp.pdf) (Accessed: July 3, 2022).
 
-Grootendorst, MP (no date) _The algorithm_, _Github.io_. Available at: [https://maartengr.github.io/BERTopic/algorithm/algorithm.html](https://maartengr.github.io/BERTopic/algorithm/algorithm.html) (Accessed: July 3, 2022).
+Grootendorst, MP. (2022) _The algorithm_, _Github.io_. Available at: [https://maartengr.github.io/BERTopic/algorithm/algorithm.html](https://maartengr.github.io/BERTopic/algorithm/algorithm.html) (Accessed: July 3, 2022).
 
 Jimenez, S. _et_ al. &#39;BM25-CTF: Improving TF and IDF Factors in BM25 by Using Collection Term Frequencies&#39;. 1 Jan. 2018 : 2887 – 2899. Available at:[https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406\_BM25-CTF\_Improving\_TF\_and\_IDF\_factors\_in\_BM25\_by\_using\_collection\_term\_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-in-using-factor-by-IDF-25 collection-term-frequencies.pdf](https://www.researchgate.net/profile/Sergio-Jimenez-7/publication/325231406_BM25-CTF_Improving_TF_and_IDF_factors_in_BM25_by_using_collection_term_frequencies/links/5b0d8349aca2725783f140e5/BM25-CTF-Improving-TF-and-IDF-factors-in-BM25-by-using-collection-term-frequencies.pdf) (Accessed: July 3, 2022).
 
