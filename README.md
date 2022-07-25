@@ -168,21 +168,31 @@ In our entropy calculation formula _H_, _nf(c)_ represents the normalized freque
 
 # _4. Preliminary Experiments_
 
-We conducted our experiment in a Jupyter Notebook using the Python language. We started by configuring an Elasticsearch server, creating a BM25 environment to carry out our empirical tests. We feed the system our textual data from the _Dmoz-Computers-500_.
+We conducted our experiment in a Jupyter Notebook using the Python language. We started by configuring an Elasticsearch server, creating a BM25 environment to carry out our empirical tests. We feed the system with our textual data from the _Dmoz-Computers-500_.
 
 First, we did our experiment with our baseline model, that is, our original documents without semantic enrichment. We tested just one query (&#39;_neural networks for linux systems_&#39;) in our search engine and calculated entropy from the distribution of classes in the information retrieval result. Next, we find the most important bigrams from our set of documents to use each of them as a new query, reserving the results obtained and the entropy calculation for each one.
 
 In the second part of our study, we transformed our data into a topic model. We start by eliminating _stopwords_, then vectorize our documents. We then reduce the dimensionality of our vector space with the UMAP algorithm and cluster the vectors of our documents with the HDBSCAN algorithm. Finally, we created a CTF-ICF topic model. Once we had our topic model, we enriched the documents with the most relevant words from the most relevant topic in each document, creating a new field in the search system with the topic terms. We repeat the process applied to the baseline, but now with the new field, that is, we create bigrams to use as queries and reserve the results obtained with our enriched model to calculate the entropy in each of the queries.
 
-Once we had our baseline and our hypothesis we were able to compare them.
+We used two pretrained models, 'all-mpnet-base-v2' and 'distiluse-base-multilingual-cased-v2'.
+
+Once we had our baseline and our two hypotheses we were able to compare them.
 
 <div align="center">
-<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/ir_comparision_github.png>
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/IR_entropy_comparison_Dmoz-Computers.png>
 </div>
 
-As we can see in our _boxplot_, the mean entropy of the enriched documents was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results.
+As we can see in our _boxplot_, the mean entropy of the enriched documents with 'mpnet' was lower than our baseline (0.68 and 0.74 respectively), remembering that the lower the entropy, the better our result. In addition, the third quartile had a lower score in enriched documents. We can therefore conclude that the hypothesis model, (BERT + topic model) + BM25, improved the search results.
 
-In the future, we will conduct new experiments looking for other parameters that may generate even better results. Further, we will also conduct experiments on more datasets. Thus, we will do a statistical analysis of the results obtained using Friedman Test, to check if the improvement is relevant.
+# _5. Friedman Test_
+
+Applying our experiment on one dataset wasn't enough to tell we had a significant improvement. We therefore applied on 7 other datasets ['classic4', 'cstr', 'dmoz_Computers', 'dmoz_Health', 'dmoz_Science', 'dmoz_Sports', 'industry_Sector', 'webkb_parsed'].
+
+Thus, we conducted a Friedman test to compare the results of our experiments. With Friedman test we can compare 3+ models and find a critical difference (CD) between them, when we applied the experiment to a set o datasets.
+
+<div align="center">
+<img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/eval1.png>
+</div>
 
 # **BIBLIOGRAPHIC REFERENCES**
 
