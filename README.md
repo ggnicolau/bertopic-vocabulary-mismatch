@@ -194,6 +194,8 @@ Thus, we conducted a Friedman test to compare the results of our experiments. Wi
 <img src=https://github.com/ggnicolau/bertopic-vocabulary-mismatch/blob/main/reports/figures/eval1.png>
 </div>
 
+Unfortunately we didn't achieve a critical difference between our baseline model and our proposed models. We could try to find better parameters and try more datasets.
+
 # **BIBLIOGRAPHIC REFERENCES**
 
 Beiske, K. (2013) &quot;Similarity in elasticsearch,&quot; _Elastic Blog_. Elastic, 26 November. Available at: [https://www.elastic.co/en/blog/found-similarity-in-elasticsearch](https://www.elastic.co/pt/blog/found-similarity-in-elasticsearch) (Accessed: July 3, 2022).
