@@ -186,7 +186,155 @@ As we can see in our _boxplot_, the mean entropy of the enriched documents with 
 
 # _5. Friedman Test_
 
-Applying our experiment on one dataset wasn't enough to tell we had a significant improvement. We therefore applied on 7 other datasets ['classic4', 'cstr', 'dmoz_Computers', 'dmoz_Health', 'dmoz_Science', 'dmoz_Sports', 'industry_Sector', 'webkb_parsed'].
+Applying our experiment on one dataset wasn't enough to tell we had a significant improvement. We therefore applied on 7 other datasets ['classic4', 'cstr', 'dmoz_Computers', 'dmoz_Health', 'dmoz_Science', 'dmoz_Sports', 'industry_Sector', 'webkb_parsed']. Thus, we extracted the mean entropy from our models for each dataset:
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>method</th>
+      <th>classic4</th>
+      <th>cstr</th>
+      <th>dmoz_Computers</th>
+      <th>dmoz_Health</th>
+      <th>dmoz_Science</th>
+      <th>dmoz_Sports</th>
+      <th>industry_Sector</th>
+      <th>webkb_parsed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>baseline</td>
+      <td>0.496493</td>
+      <td>0.785430</td>
+      <td>0.739105</td>
+      <td>0.638945</td>
+      <td>0.766606</td>
+      <td>0.069335</td>
+      <td>0.800533</td>
+      <td>0.749695</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mpnet</td>
+      <td>0.441927</td>
+      <td>0.776750</td>
+      <td>0.682021</td>
+      <td>0.570866</td>
+      <td>0.686000</td>
+      <td>0.188207</td>
+      <td>0.762498</td>
+      <td>0.729132</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>distiluse</td>
+      <td>0.462332</td>
+      <td>0.785575</td>
+      <td>0.694653</td>
+      <td>0.605149</td>
+      <td>0.726343</td>
+      <td>0.213400</td>
+      <td>0.782288</td>
+      <td>0.721760</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+Furthermore, we ranked our models based on our mean entropy:
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>method</th>
+      <th>average_rank</th>
+      <th>classic4_rank</th>
+      <th>cstr_rank</th>
+      <th>dmoz_Computers_rank</th>
+      <th>dmoz_Science_rank</th>
+      <th>dmoz_Health_rank</th>
+      <th>dmoz_Sports_rank</th>
+      <th>industry_Sector_rank</th>
+      <th>webkb_parsed_rank</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>baseline</td>
+      <td>2.625</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mpnet</td>
+      <td>1.250</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>distiluse</td>
+      <td>2.125</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 Thus, we conducted a Friedman test to compare the results of our experiments. With Friedman test we can compare 3+ models and find a critical difference (CD) between them, when we applied the experiment to a set o datasets.
 
