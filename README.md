@@ -189,19 +189,6 @@ As we can see in our _boxplot_, the mean entropy of the enriched documents with 
 Applying our experiment on one dataset wasn't enough to tell we had a significant improvement. We therefore applied on 7 other datasets ['classic4', 'cstr', 'dmoz_Computers', 'dmoz_Health', 'dmoz_Science', 'dmoz_Sports', 'industry_Sector', 'webkb_parsed']. Thus, we extracted the mean entropy from our models for each dataset:
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -262,19 +249,6 @@ Applying our experiment on one dataset wasn't enough to tell we had a significan
 Furthermore, we ranked our models based on our mean entropy:
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
