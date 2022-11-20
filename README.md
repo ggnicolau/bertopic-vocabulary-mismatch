@@ -126,7 +126,7 @@ In a second moment, the UMAP algorithm is applied to reduce the dimensionality o
 Finally, we apply the CTF-ICF formula (a variation of the TF-IDF formula) to the clusters developed in the previous phase. Thus, each cluster is converted into a single document rather than a set of documents. From each cluster, we extract the frequency of the word x in cluster c, where c refers to the cluster we created earlier. This results in our cluster-based TF representation. As in the classic TF-IDF, we multiply TF by IDF to obtain the per-word importance score in each class (Grootendorst, 2022).
 
 <div align="center">
-<img src=https://maartengr.github.io/BERTopic/img/ctfidf.png>
+<img src=https://maartengr.github.io/BERTopic/algorithm/c-TF-IDF.svg>
 Source: (Grootendorst, 2022)
 </div>
 
