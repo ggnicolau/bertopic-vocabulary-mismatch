@@ -115,6 +115,7 @@ For this, we use the _BERTopic_ library framework (Grootendorst, 2022) to create
 
 <div align="center">
 <img src=https://maartengr.github.io/BERTopic/img/algorithm.png>
+ 
 Source: (Grootendorst, 2022)
 </div>
 
