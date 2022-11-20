@@ -115,8 +115,7 @@ For this, we use the _BERTopic_ library framework (Grootendorst, 2022) to create
 
 <div align="center">
 <img src=https://maartengr.github.io/BERTopic/img/algorithm.png>
- 
-Source: (Grootendorst, 2022)
+ Source: (Grootendorst, 2022)
 </div>
 
 \
@@ -128,7 +127,8 @@ Finally, we apply the CTF-ICF formula (a variation of the TF-IDF formula) to the
 
 <div align="center">
 <img src=https://maartengr.github.io/BERTopic/algorithm/c-TF-IDF.svg>
-Source: (Grootendorst, 2022)
+
+ Source: (Grootendorst, 2022)
 </div>
 
 \
